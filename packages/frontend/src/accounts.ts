@@ -306,7 +306,7 @@ export async function getAccountMenu(opts: {
 			icon: 'ti ti-plus',
 			text: i18n.ts.addAccount,
 			children: [{
-				text: i18n.ts.existingAccount,
+				text: 'Continue with EvexAccount',
 				action: () => {
 					getAccountWithSigninDialog().then(res => {
 						if (res != null) {
@@ -315,7 +315,7 @@ export async function getAccountMenu(opts: {
 					});
 				},
 			}, {
-				text: i18n.ts.createAccount,
+				text: 'Create with EvexAccount',
 				action: () => {
 					getAccountWithSignupDialog().then(res => {
 						if (res != null) {

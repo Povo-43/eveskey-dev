@@ -34,12 +34,12 @@ SPDX-License-Identifier: AGPL-3.0-only
 							</div>
 						</label>
 					</template>
-					<button class="_button" :class="[$style.accountSelectorItem, $style.accountSelectorAddAccountRoot]" @click="clickAddAccount">
-						<div :class="[$style.accountSelectorAvatar, $style.accountSelectorAddAccountAvatar]">
-							<i class="ti ti-user-plus"></i>
-						</div>
-						<div :class="[$style.accountSelectorBody, $style.accountSelectorName]">{{ i18n.ts.addAccount }}</div>
-					</button>
+				<button class="_button" :class="[$style.accountSelectorItem, $style.accountSelectorAddAccountRoot]" @click="clickAddAccount">
+					<div :class="[$style.accountSelectorAvatar, $style.accountSelectorAddAccountAvatar]">
+						<i class="ti ti-user-plus"></i>
+					</div>
+					<div :class="[$style.accountSelectorBody, $style.accountSelectorName]">Add with EvexAccount</div>
+				</button>
 				</div>
 			</div>
 			<div class="_buttonsCenter">
@@ -187,7 +187,7 @@ function clickAddAccount(ev: PointerEvent) {
 	selectedUser.value = null;
 
 	os.popupMenu([{
-		text: i18n.ts.existingAccount,
+		text: 'Continue with EvexAccount',
 		action: () => {
 			getAccountWithSigninDialog().then(async (res) => {
 				if (res != null) {
@@ -200,7 +200,7 @@ function clickAddAccount(ev: PointerEvent) {
 			});
 		},
 	}, {
-		text: i18n.ts.createAccount,
+		text: 'Create with EvexAccount',
 		action: () => {
 			getAccountWithSignupDialog().then(async (res) => {
 				if (res != null) {
