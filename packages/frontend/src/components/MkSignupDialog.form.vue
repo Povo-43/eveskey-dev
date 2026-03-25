@@ -14,13 +14,13 @@ SPDX-License-Identifier: AGPL-3.0-only
 				{{ i18n.ts._signup.almostThere }}
 			</div>
 			<div :class="$style.text">
-				Signing up with EvexAccount will create a new Misskey account.
+				EvexAccountに登録すると、新しいMisskeyアカウントが作成されます。
 			</div>
 			<MkButton type="button" gradate large rounded :disabled="submitting" style="margin: 0 auto;" @click="onSubmit">
 				<template v-if="submitting">
 					<MkLoading :em="true" :colored="false"/>
 				</template>
-				<template v-else>Create with EvexAccount</template>
+				<template v-else>EvexAccountへ移動する</template>
 			</MkButton>
 		</div>
 	</div>

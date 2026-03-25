@@ -44,17 +44,17 @@ SPDX-License-Identifier: AGPL-3.0-only
 				</g>
 			</svg>
 			<div :class="$style.title">
-				<div>Welcome to Misskey!</div>
+				<div>Eveskeyへようこそ!</div>
 				<div :class="$style.version">v{{ version }}</div>
 			</div>
 			<div style="padding: 16px 32px 32px 32px;">
 				<form v-if="!accountCreated" class="_gaps_m" @submit.prevent="createAccount()">
 					<div style="text-align: center;" class="_gaps_s">
 						<div><b>{{ i18n.ts._serverSetupWizard.installCompleted }}</b></div>
-						<div>Create the first Misskey account through EvexAccount.</div>
+						<div>EvexAccountで初期アカウントを作ってください。</div>
 					</div>
 					<MkButton gradate large rounded :disabled="accountCreating" data-cy-admin-ok style="margin: 0 auto;" type="submit">
-						{{ accountCreating ? i18n.ts.processing : 'Create with EvexAccount' }}<MkEllipsis v-if="accountCreating"/>
+						{{ accountCreating ? i18n.ts.processing : 'EvexAccountで作る' }}<MkEllipsis v-if="accountCreating"/>
 					</MkButton>
 				</form>
 				<div v-else-if="step === 0" class="_gaps_m">
