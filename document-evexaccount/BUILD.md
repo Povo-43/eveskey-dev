@@ -1,100 +1,91 @@
-# EvexAccount local build
+# EvexAccount ローカルビルド・ガイド
+このガイドでは、ホストマシンに Node.js をインストールすることなく、Docker Compose を使用して Misskey と EvexAccount の連携フローをローカルで実行・テストする方法を解説します。
 
-This guide explains how to run Misskey locally on Windows 11 with Docker Desktop only, so you can test the EvexAccount authentication flow without installing Node.js on the host.
+## このセットアップで実行されるもの
+Misskey: Web、バックエンド、マイグレーション（Docker上）
 
-## What this setup runs
+PostgreSQL: データベース（Docker上）
 
-- Misskey web, backend, and migrations in Docker
-- PostgreSQL in Docker
-- Redis in Docker
+Redis: キャッシュサーバー（Docker上）
 
-## Prerequisites
+## 事前準備
+Linux(Ubuntu, Debian, Fedora 等)
 
-- Windows 11
-- Docker Desktop running
-- Git installed
-- PowerShell
+Docker および Docker Compose (V2) がインストールされ、実行可能であること
 
-## 1. Prepare the local config files
+Git（リポジトリのチェックアウト用）
 
-From the repository root, create local copies of the example config files:
+## 1. 設定ファイルのコピー
+リポジトリのルートディレクトリで、.config 内にあるサンプル設定ファイルをコピーして、実際に使用する設定ファイルを作成します。
 
-```powershell
-Copy-Item .\.config\docker_example.env .\.config\docker.env
-Copy-Item .\.config\example.yml .\.config\default.yml
+
+```Bash
+cp .config/default_example.yml .config/default.yml
+cp .config/docker_example.env .config/docker.env
 ```
 
-Edit [`.config/default.yml`](C:/Users/anill/Desktop/eveskey/.config/default.yml):
+## 設定のカスタマイズ
+.config/default.yml の編集:
 
-- Set `url` to the URL you will actually open in the browser.
-- For local-only testing, `http://localhost:3000` is fine if your EvexAccount registration allows it.
-- If EvexAccount requires HTTPS, set `url` to the public HTTPS origin that will reach this container.
-- Set `db.host` to `db`.
-- Set `redis.host` to `redis`.
-- Leave the database port at `5432` and the Redis port at `6379`.
+- url: ブラウザでアクセスするアドレスを設定します(既定 https://misskey.evex.land)。
 
-Edit [`.config/docker.env`](C:/Users/anill/Desktop/eveskey/.config/docker.env) and add the EvexAccount values that the backend reads from `process.env`:
+.config/docker.env の編集:
+- EvexAccount の認証情報を入力します。nano や vim などのエディタを使用してください。
 
-```powershell
-EVEXACCOUNT_ISSUER=https://account.evex.land
-EVEXACCOUNT_CLIENT_ID=<your-client-id>
-EVEXACCOUNT_CLIENT_SECRET=<your-client-secret>
+```
+EVEXACCOUNT_CLIENT_ID=<クライアントID>
+EVEXACCOUNT_CLIENT_SECRET=<クライアントシークレット>
 ```
 
-If you use a custom issuer, also add these optional overrides:
-
-```powershell
-EVEXACCOUNT_AUTHORIZATION_ENDPOINT=https://...
-EVEXACCOUNT_TOKEN_ENDPOINT=https://...
-EVEXACCOUNT_USERINFO_ENDPOINT=https://...
+## 1. スタックの起動
+```Bash
+docker compose up -d --build
 ```
 
-## 2. Start the full stack
+これによりイメージがビルドされ、以下のサービスがバックグラウンドで起動します。
 
-Use the Docker compose example that runs Misskey itself in Docker:
+- Misskey: localhost:3000(自認: https://misskey.evex.land)
 
-```powershell
-docker compose -f compose_example.yml up -d --build
+- PostgreSQL: 内部ホスト名 db
+
+- Redis: 内部ホスト名 redis
+
+起動の進捗やエラーを確認するには、以下のコマンドでログをストリーミングできます：
+
+```Bash
+docker compose logs -f web
+```
+## 3. Misskey にアクセスする
+ブラウザで https://misskey.evex.land（または http://localhost:3000）を開きます。
+※ 外部の認証サーバー（EvexAccount）がコールバックを送信します。
+
+## 1. EvexAccount コールバックに関する注意点
+標準のコールバックパスは /callback です。
+
+EvexAccount の管理画面で、このパスを含むフルURLをリダイレクトURIとして登録してください。
+
+例
+![image.png](./image.png)
+
+設定ファイルを変更したあとは、変更を反映させるために再ビルドと再起動が必要です：
+
+```Bash
+docker compose up -d --build
 ```
 
-This starts:
+## スタックの停止
+```Bash
+docker compose down
+```
+## データの完全削除:
+データベースやアップロードファイルをリセットしたい場合は、コンテナを停止した後に以下のディレクトリを削除してください（実行には sudo が必要な場合があります）。
 
-- Misskey on `localhost:3000`
-- PostgreSQL on the internal `db` service
-- Redis on the internal `redis` service
-
-The first start can take a while because the image is built from the repository and the database is migrated during container startup.
-
-To watch the application boot:
-
-```powershell
-docker compose -f compose_example.yml logs -f web
+```Bash
+rm -rf db/ redis/ files/
 ```
 
-## 3. Open Misskey
+## 補足事項
 
-When the containers are ready, open:
+Permission: docker コマンド実行時に権限エラーが出る場合は、sudo をつけるか、ユーザーを docker グループに追加してください。
 
-- `http://localhost:3000`
-
-If you are testing the full EvexAccount redirect path and the issuer needs a public HTTPS callback, expose the service through an HTTPS endpoint that points to the container and set `url` to that public origin before restarting the stack.
-
-## 4. EvexAccount callback notes
-
-- The local callback route is `/callback`.
-- The EvexAccount app registration must allow that redirect URI.
-- The backend reads `EVEXACCOUNT_ISSUER`, `EVEXACCOUNT_CLIENT_ID`, `EVEXACCOUNT_CLIENT_SECRET`, and the optional endpoint overrides from the container environment.
-- If you change `.config/default.yml` or `.config/docker.env`, restart the stack with `docker compose -f compose_example.yml up -d --build`.
-
-## Stop the stack
-
-```powershell
-docker compose -f compose_example.yml down
-```
-
-To remove the data as well, delete the `db`, `redis`, and `files` folders in the repository root after stopping the containers.
-
-## Notes
-
-- The Dockerfile already runs `migrateandstart`, so you do not need to run `pnpm` on the host.
-- Because `compose_example.yml` now passes `.config/docker.env` into the web container, the EvexAccount settings you add there are available during startup.
+自動マイグレーション: Dockerfile 内で migrateandstart が定義されているため、手動でデータベースの初期化コマンドを打つ必要はありません。

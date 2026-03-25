@@ -18,7 +18,7 @@ SPDX-License-Identifier: AGPL-3.0-only
 				<template v-if="waiting">
 					<MkLoading :em="true" :colored="false"/>
 				</template>
-				<template v-else>Continue with EvexAccount</template>
+				<template v-else>EvexAccountで続行</template>
 			</MkButton>
 			<div :class="$style.caption">
 				Sign in and link this account through EvexAccount.

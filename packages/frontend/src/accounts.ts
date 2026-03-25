@@ -306,7 +306,7 @@ export async function getAccountMenu(opts: {
 			icon: 'ti ti-plus',
 			text: i18n.ts.addAccount,
 			children: [{
-				text: 'Continue with EvexAccount',
+				text: 'EvexAccountで続ける',
 				action: () => {
 					getAccountWithSigninDialog().then(res => {
 						if (res != null) {
@@ -315,7 +315,7 @@ export async function getAccountMenu(opts: {
 					});
 				},
 			}, {
-				text: 'Create with EvexAccount',
+				text: 'EvexAccountで作成',
 				action: () => {
 					getAccountWithSignupDialog().then(res => {
 						if (res != null) {

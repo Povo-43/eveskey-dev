@@ -187,7 +187,7 @@ function clickAddAccount(ev: PointerEvent) {
 	selectedUser.value = null;
 
 	os.popupMenu([{
-		text: 'Continue with EvexAccount',
+		text: 'EvexAccountで続行',
 		action: () => {
 			getAccountWithSigninDialog().then(async (res) => {
 				if (res != null) {
@@ -200,7 +200,7 @@ function clickAddAccount(ev: PointerEvent) {
 			});
 		},
 	}, {
-		text: 'Create with EvexAccount',
+		text: 'EvexAccountで作成',
 		action: () => {
 			getAccountWithSignupDialog().then(async (res) => {
 				if (res != null) {

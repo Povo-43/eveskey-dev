@@ -70,7 +70,7 @@ export class EvexAccountService {
 		@Inject(DI.userProfilesRepository)
 		private userProfilesRepository: UserProfilesRepository,
 	) {
-		this.issuer = process.env.EVEXACCOUNT_ISSUER ?? 'https://account.evex.land';
+		this.issuer = 'https://account.evex.land';
 		this.authorizationEndpoint = process.env.EVEXACCOUNT_AUTHORIZATION_ENDPOINT ?? new URL('/api/oauth/authorize', this.issuer).toString();
 		this.tokenEndpoint = process.env.EVEXACCOUNT_TOKEN_ENDPOINT ?? new URL('/api/oauth/token', this.issuer).toString();
 		this.userInfoEndpoint = process.env.EVEXACCOUNT_USERINFO_ENDPOINT ?? new URL('/api/oauth/userinfo', this.issuer).toString();
@@ -272,11 +272,10 @@ export class EvexAccountService {
 			},
 		};
 
-		await this.userProfilesRepository.update({ userId: accountId }, {
-			email: userInfo.email ?? null,
-			emailVerified: userInfo.email_verified === true,
-			clientData: nextClientData,
-		});
+		profile.email = userInfo.email ?? null;
+		profile.emailVerified = userInfo.email_verified === true;
+		profile.clientData = nextClientData;
+		await this.userProfilesRepository.save(profile);
 	}
 
 	private buildUsernameCandidates(userInfo: EvexAccountUserInfo): string[] {
