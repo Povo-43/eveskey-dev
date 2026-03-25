@@ -10,7 +10,7 @@ SPDX-License-Identifier: AGPL-3.0-only
 			<div :class="$style.icon">
 				<i class="ti ti-login-2"></i>
 			</div>
-			<div :class="$style.title">EvexAccount</div>
+			<div :class="$style.title">{{ i18n.ts.evexAccount.title }}</div>
 			<div v-if="message" :class="$style.message">{{ message }}</div>
 		</div>
 		<div :class="$style.body" class="_gaps_m">
@@ -18,10 +18,10 @@ SPDX-License-Identifier: AGPL-3.0-only
 				<template v-if="waiting">
 					<MkLoading :em="true" :colored="false"/>
 				</template>
-				<template v-else>EvexAccountで続行</template>
+				<template v-else>{{ i18n.ts.evexAccount.signIn }}</template>
 			</MkButton>
 			<div :class="$style.caption">
-				Sign in and link this account through EvexAccount.
+				{{ i18n.ts.evexAccount.signInDescription }}
 			</div>
 		</div>
 	</div>

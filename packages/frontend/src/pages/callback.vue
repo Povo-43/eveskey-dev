@@ -12,7 +12,7 @@ SPDX-License-Identifier: AGPL-3.0-only
 		</div>
 		<div v-else-if="phase === 'success'" :class="$style.card" class="_gaps_s">
 			<div :class="$style.icon"><i class="ti ti-check"></i></div>
-			<div :class="$style.title">EvexAccount</div>
+			<div :class="$style.title">{{ i18n.ts.evexAccount.title }}</div>
 			<div>{{ i18n.ts._auth.accepted }}</div>
 		</div>
 		<div v-else :class="$style.card" class="_gaps_s">
@@ -82,7 +82,7 @@ onMounted(async () => {
 
 		const body = await res.json();
 		if (!res.ok) {
-			throw new Error(body?.error?.message ?? 'Failed to complete EvexAccount authorization');
+			throw new Error(body?.error?.message ?? i18n.ts.evexAccount.errorComplete);
 		}
 
 		postEvexAccountResult(body);
@@ -104,7 +104,7 @@ onMounted(async () => {
 });
 
 definePage(() => ({
-	title: 'EvexAccount',
+	title: i18n.ts.evexAccount.title,
 	icon: 'ti ti-login-2',
 }));
 </script>

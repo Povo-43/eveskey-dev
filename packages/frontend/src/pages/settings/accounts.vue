@@ -52,10 +52,10 @@ function showMenu(host: string, id: string, ev: PointerEvent) {
 
 function addAccount(ev: PointerEvent) {
 	os.popupMenu([{
-		text: 'EvexAccountで続行',
+		text: i18n.ts.evexAccount.signIn,
 		action: () => { addExistingAccount(); },
 	}, {
-		text: 'EvexAccountで作成',
+		text: i18n.ts.evexAccount.signUp,
 		action: () => { createAccount(); },
 	}], ev.currentTarget ?? ev.target);
 }

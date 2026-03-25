@@ -6,6 +6,7 @@
 import { $i } from '@/i.js';
 import { instance } from '@/instance.js';
 import { popupAsyncWithDialog } from '@/os.js';
+import { i18n } from '@/i18n.js';
 
 export type OpenOnRemoteOptions = {
 	/**
@@ -59,7 +60,7 @@ export async function pleaseLogin(opts: {
 
 	const { dispose } = await popupAsyncWithDialog(import('@/components/MkSigninDialog.vue').then(x => x.default), {
 		autoSet: true,
-		message: opts.message ?? (_openOnRemote ? 'Continue with EvexAccount to use the remote option.' : 'Sign in with EvexAccount to continue.'),
+		message: opts.message ?? (_openOnRemote ? i18n.ts.evexAccount.pleaseLoginRemote : i18n.ts.evexAccount.pleaseLoginContinue),
 		openOnRemote: _openOnRemote,
 	}, {
 		cancelled: () => {

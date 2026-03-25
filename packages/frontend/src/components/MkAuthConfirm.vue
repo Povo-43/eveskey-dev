@@ -38,7 +38,7 @@ SPDX-License-Identifier: AGPL-3.0-only
 					<div :class="[$style.accountSelectorAvatar, $style.accountSelectorAddAccountAvatar]">
 						<i class="ti ti-user-plus"></i>
 					</div>
-					<div :class="[$style.accountSelectorBody, $style.accountSelectorName]">Add with EvexAccount</div>
+					<div :class="[$style.accountSelectorBody, $style.accountSelectorName]">{{ i18n.ts.evexAccount.addWith }}</div>
 				</button>
 				</div>
 			</div>
@@ -186,11 +186,11 @@ init();
 function clickAddAccount(ev: PointerEvent) {
 	selectedUser.value = null;
 
-	os.popupMenu([{
-		text: 'EvexAccountで続行',
-		action: () => {
-			getAccountWithSigninDialog().then(async (res) => {
-				if (res != null) {
+		os.popupMenu([{
+			text: i18n.ts.evexAccount.signIn,
+			action: () => {
+				getAccountWithSigninDialog().then(async (res) => {
+					if (res != null) {
 					os.success();
 					await init();
 					if (users.value.has(res.id)) {
@@ -199,8 +199,8 @@ function clickAddAccount(ev: PointerEvent) {
 				}
 			});
 		},
-	}, {
-		text: 'EvexAccountで作成',
+		}, {
+			text: i18n.ts.evexAccount.signUp,
 		action: () => {
 			getAccountWithSignupDialog().then(async (res) => {
 				if (res != null) {

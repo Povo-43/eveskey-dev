@@ -5,6 +5,7 @@
 
 import * as Misskey from 'misskey-js';
 import { apiUrl } from '@@/js/config.js';
+import { i18n } from '@/i18n.js';
 
 const MESSAGE_TYPE = 'misskey:evex-account:complete';
 
@@ -36,7 +37,7 @@ export async function startEvexAccountFlow(): Promise<EvexAccountResponse | null
 
 	if (!startRes.ok) {
 		const body = await startRes.json().catch(() => null);
-		throw new Error(body?.error?.message ?? 'Failed to start EvexAccount authorization');
+		throw new Error(body?.error?.message ?? i18n.ts.evexAccount.errorStart);
 	}
 
 	const { authorizeUrl } = await startRes.json() as StartResponse;
